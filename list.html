@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/template.js"></script>
+    <style>
+        body{
+            font: 12px;
+        }
+        ul{
+            list-style: none;
+        }
+        #newslist li{
+            border-bottom: 1px solid #eee;
+            padding: 6px;
+        }
+        #newslist li img{
+            width: 150px;
+            vertical-align: top;
+        }
+        #newslist li div{
+            display: inline-block;
+
+        }
+        #newslist li div p{
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h2>这是新闻列表</h2>
+    <div id="newslist">
+        <script id="mynews" type="text/html">
+            <ul>
+                {{each newslist as news i}}
+                <li>
+                    <img src="{{news.thumbnail_pic_s}}" alt="">
+                    <div>
+                        <h4>{{news.title}}</h4>
+                        <p class="date">{{news.date}}</p>
+                        <p class="author">{{news.author_name}}</p>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </script>
+    </div>
+    <script>
+        var t = window.location.search.substring(1).split("=")[1];
+        console.log(t);
+
+        fetch("http://127.0.0.1:3000/news/"+t,{
+            method:"get"
+        }).then((r)=>{
+            r.json().then((s)=>{
+                var data={
+                    newslist:s.data
+                };
+                var html=template("mynews",data);
+                document.getElementById("newslist").innerHTML=html;
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }).catch((err)=>{
+            console.log(err);
+        });
+    </script>
+</body>
+</html>

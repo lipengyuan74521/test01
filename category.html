@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/template.js"></script>
+</head>
+<body>
+    <div id="box">
+        <script id="category" type="text/html">
+            <ul>
+                {{each catelist as cate i}}
+                    <li>
+                        <a href="list.html?t={{cate.cnameEn}}">{{cate.cname}}</a>
+                    </li>
+                {{/each}}
+            </ul>
+        </script>
+    </div>
+    <script>
+        fetch("http://127.0.0.1:3000/news",{
+            method:"get"
+        }).then((r)=>{
+            r.json().then((s)=>{
+                console.log(s);
+                var data = {
+                    catelist:s.data
+                };
+               var html= template("category",data);
+               console.log(html);
+               document.getElementById("box").innerHTML=html;
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }).catch((err)=>{
+            console.log(err);
+        });
+    </script>
+</body>
+</html>
